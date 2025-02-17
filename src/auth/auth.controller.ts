@@ -7,6 +7,7 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() body: { username: string; password: string }) {
+    console.log('env', process.env.JWT_SECRET);
     return this.authService.login(body);
   }
 }

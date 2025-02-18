@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { TransactionModule } from './transaction/transaction.module';
+import { MongooseModule } from '@nestjs/mongoose';
+
 
 @Module({
   imports: [
@@ -17,8 +20,10 @@ import { AuthModule } from './auth/auth.module';
       synchronize: false, // Pakai migration
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
+    MongooseModule.forRoot(process.env.MONGODB_URI),
     UserModule,
     AuthModule,
+    TransactionModule,
   ],
 })
 export class AppModule {}

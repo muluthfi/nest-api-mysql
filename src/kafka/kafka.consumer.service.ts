@@ -1,0 +1,32 @@
+import { Injectable, OnModuleDestroy } from "@nestjs/common";
+import { Kafka } from "kafkajs";
+
+@Injectable()
+export class ConsumerService implements OnModuleDestroy {
+    private readonly kafka = new Kafka({
+        clientId: 'nestjs-customer',
+        brokers: [process.env.KAFKA_BROKER],
+        ssl: {
+            ca: [require('fs').readFileSync('./certs/ca.pem', 'utf-8')],
+            cert: [require('fs').readFileSync('./certs/access.cert', 'utf-8')],
+            key: [require('fs').readFileSync('./certs/access.key', 'utf-8')],
+        },
+    });
+
+    private readonly consumer = this.kafka.consumer({ groupId: 'nestjs-group' });
+    
+    async consume(topicConfig: { topic:string; fromBeginning?: boolean }, callback: (message: any) => Promise<void>) {
+        await this.consumer.connect();
+        await this.consumer.subscribe({ topic: topicConfig.topic, fromBeginning: topicConfig.fromBeginning || false });
+
+        await this.consumer.run({
+            eachMessage: async ({ message }) => {
+                callback(message);
+            },
+        });
+    }
+
+    async onModuleDestroy() {
+        await this.consumer.disconnect();
+    }
+}

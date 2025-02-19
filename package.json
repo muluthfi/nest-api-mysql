@@ -31,6 +31,7 @@
     "bcrypt": "^5.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
+    "kafkajs": "^2.2.4",
     "mongodb": "^5.9.2",
     "mongoose": "^8.10.1",
     "mssql": "^10.0.4",

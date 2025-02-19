@@ -9,12 +9,12 @@ export class TransactionController {
 
 
 @Post()
-// @UseGuards(AuthGuard('jwt'))
 async create(@Body() transaction: Partial<Transaction>) {
     return this.transactionService.createTransaction(transaction);
 }
 
 @Get()
+@UseGuards(AuthGuard('jwt'))
 async findAll() {
     return this.transactionService.getTransactions();
 }

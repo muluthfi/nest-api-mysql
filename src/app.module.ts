@@ -8,6 +8,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Client } from 'node-rdkafka';  
 import * as fs from 'fs';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { KafkaModule } from './kafka/kafka.module';
+import { KafkaProducer } from './kafka/kafka.producer';
+import { Test } from '@nestjs/testing';
+import { TestModule } from './test/test.module';
 
 
 @Module({
@@ -24,27 +28,30 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    //kafka client config
-    ClientsModule.register([
-      {
-        name: 'KAFKA_SERVICE',
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            clientId: 'nestjs-client',
-            brokers: [process.env.KAFKA_BROKER],
-            ssl: {
-              ca: [fs.readFileSync('./src/kafka/certs/ca.pem', 'utf-8')],
-              cert: [fs.readFileSync('./src/kafka/certs/service.cert', 'utf-8')],
-              key: [fs.readFileSync('./src/kafka/certs/service.key', 'utf-8')],
-            },
-          },
-        },
-      },
-    ]),
+    // ClientsModule.register([
+    //   {
+    //     name: 'KAFKA_SERVICE',
+    //     transport: Transport.KAFKA,
+    //     options: {
+    //       client: {
+    //         clientId: 'nestjs-client',
+    //         brokers: [process.env.KAFKA_BROKER],
+    //         ssl: {
+    //           ca: [fs.readFileSync('./src/kafka/certs/ca.pem', 'utf-8')],
+    //           cert: [fs.readFileSync('./src/kafka/certs/service.cert', 'utf-8')],
+    //           key: [fs.readFileSync('./src/kafka/certs/service.key', 'utf-8')],
+    //         },
+    //       },
+    //       consumer: {
+    //         groupId: 'nestjs-group',
+    //       },
+    //     },
+    //   },
+    // ]),
     UserModule,
     AuthModule,
     TransactionModule,
+    // TestModule,
   ],
 })
 export class AppModule {}

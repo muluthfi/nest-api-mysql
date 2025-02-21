@@ -1,11 +1,11 @@
 import { Controller, Post, Body, UseGuards, Get, Req, Request } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
-import { KafkaProducer } from '../kafka/kafka.producer';
+// import { KafkaProducer } from '../kafka/kafka.producer';  
 
 @Controller('users')
 export class UserController {
-  constructor(private userService: UserService, kafkaProducer: KafkaProducer) {}
+  constructor(private userService: UserService) {}
 
   @Post('register')
   async register(@Body() body: { username: string; password: string }) {
@@ -21,9 +21,9 @@ export class UserController {
     };
   }
 
-  @Get('send')
-  async sendMessage() {
-    await this.kafkaProducer.sendMessage('my-topic', { message: 'Hello Kafka' });
-    return { message: 'sent to Kafka' };
-  }
+  // @Get('send')
+  // async sendMessage() {
+  //   await this.kafkaProducer.sendMessage('my-topic', { message: 'Hello Kafka' });
+  //   return { message: 'sent to Kafka' };
+  // }
 }

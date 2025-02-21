@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { KafkaProducer } from './kafka.producer';
 import { KafkaConsumer } from './kafka.consumer';
-import { ConsumerService } from './consumer.service';
+import { ConsumerService } from './kafka.consumer.service';
 
 
 @Module({
